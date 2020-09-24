@@ -1,0 +1,18 @@
+file = open(resres_1.csv, r)
+category = file.readline().split(',')
+print(category)
+userdata = input('Данные поиска ')
+userdata = userdata.split(' ')
+if userdata[0] in category
+    count = category.index(userdata[0])
+    for line in file
+        data = line.split(',')
+        if userdata[1] == data[count]
+            print(data)
+
+print('Данные некорректны')
+'''
+for line in file
+    data = line.split(',')
+    print(data)
+'''
