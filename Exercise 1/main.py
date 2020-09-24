@@ -1,5 +1,4 @@
 file = open("telegram_clear_data.txt", "r")
-Condition = True
 nickname = input('Искомый ник: ')
 for line in file:
     data = line.split('|')
@@ -12,7 +11,5 @@ for line in file:
         print('uid: ', data[5])
         print('nik: ', data[6])
         print('wo: ', data[7])
-        Condition = False
-        break
-if Condition:
-    print('Не найдено совпадений')
+        exit()
+print('Не найдено совпадений')
