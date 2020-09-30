@@ -1,10 +1,13 @@
 import os
 userdata = 0
 list_of_files = os.listdir("res")
-usercat = input('Введите категорию поиска:')
+usercat = 0
 for file in list_of_files:
     file = open('res/' + file, 'r')
     category = file.readline().split(',')
+    print(category)
+    if usercat == 0:
+        usercat = input('Введите категорию поиска:')
     if usercat in category:
         count = category.index(usercat)
         if userdata == 0:
