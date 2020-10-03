@@ -13,3 +13,10 @@ for line in file:
         print('wo: ', data[7])
         exit()
 print('Не найдено совпадений')
+
+'''
+import os
+file = open("telegram_clear_data.txt", "r")
+b = os.path.getsize("telegram_clear_data.txt")
+cntr = b//166
+'''
