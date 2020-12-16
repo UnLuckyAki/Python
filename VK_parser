@@ -1,0 +1,94 @@
+import requests
+from tqdm import tqdm
+
+def write():
+    try:
+        user_id = str(gg['response'][0]['id'])
+    except:
+        user_id = ''
+    try:
+        first_name = gg['response'][0]['first_name']
+    except:
+        first_name = ''
+    try:
+        last_name = gg['response'][0]['last_name']
+    except:
+        last_name = ''
+    try:
+        middle_name = gg['response'][0]['nickname']
+    except:
+        middle_name = ''
+    try:
+        city = gg['response'][0]['city']['title']
+    except:
+        city = ''
+    file.write(user_id + ',' + first_name + ',' + last_name + ',' + middle_name + ',' + city)
+    try:
+        for i in kk['response']['items']:
+            file.write(',' + str(i))
+        file.write('\n')
+    except:
+        pass
+
+
+def friends():
+
+    with tqdm(total=counter) as pbar:
+        for i in kk['response']['items']:
+            request_friend = requests.get(f'https://api.vk.com/method/users.get?user_ids={i}&fields=bdate,city,nickname,'f'screen_name&access_token'f'=65e9149965e9149965e914992c659c6cd3665e965e914993a3e0e441010a0b39717cca1&v=5.126')
+            aa = request_friend.json()
+            request_friends_friends = requests.get(f'https://api.vk.com/method/friends.get?user_id={i}&access_token'f'=65e9149965e9149965e914992c659c6cd3665e965e914993a3e0e441010a0b39717cca1&v=5.126')
+            bb = request_friends_friends.json()
+            friends_write(aa, bb)
+            pbar.update(1)
+
+
+def friends_write(aa, bb):
+    try:
+        user_id = str(aa['response'][0]['id'])
+    except:
+        user_id = ''
+    try:
+        first_name = aa['response'][0]['first_name']
+    except:
+        first_name = ''
+    try:
+        last_name = aa['response'][0]['last_name']
+    except:
+        last_name = ''
+    try:
+        middle_name = aa['response'][0]['nickname']
+    except:
+        middle_name = ''
+    try:
+        city = aa['response'][0]['city']['title']
+    except:
+        city = ''
+    file.write(user_id + ',' + first_name + ',' + last_name + ',' + middle_name + ',' + city)
+    try:
+        for i in bb['response']['items']:
+            file.write(',' + str(i))
+    except:
+        pass
+    file.write('\n')
+
+zero_id = input('Введите ID пользователя:\n')
+request_user = requests.get(
+    f'https://api.vk.com/method/users.get?user_ids={zero_id}&fields=city,nickname,'f'screen_name&access_token'f'=65e9149965e9149965e914992c659c6cd3665e965e914993a3e0e441010a0b39717cca1&v=5.126')
+gg = request_user.json()
+if 'error' in gg:
+    print('Такого пользователя не существует!')
+else:
+    file = open('users.txt', 'w', encoding='utf-8')
+    zero_id = gg['response'][0]['id']
+    request_friends = requests.get(
+        f'https://api.vk.com/method/friends.get?user_id={zero_id}&access_token'f'=65e9149965e9149965e914992c659c6cd3665e965e914993a3e0e441010a0b39717cca1&v=5.126')
+    kk = request_friends.json()
+    if 'error' in kk:
+        write()
+    else:
+        counter = kk['response']['count']
+        write()
+        friends()
+        file.close()
+    print('База собрана. Файл сохранен')
