@@ -1,0 +1,177 @@
+class Matrix:
+
+    def __init__(self):
+        pass
+
+    '''def check(self, row_count, column_count, data):
+        if row_count * column_count > len(data):
+            raise ValueError('Недостаточно данных для заполнения элементов матрицы')
+        if row_count * column_count < len(data):
+            raise ValueError('Все элементы матрицы заняты! Слишком много данных!')
+    '''
+
+    def create(self, row_count: int, column_count: int, data: list):
+        #self.check(row_count, column_count, data)
+        self.matrix = []
+        self.columns = column_count
+        self.rows = row_count
+        for i in range(row_count):
+            self.matrix.append([])
+            for y in range(column_count):
+                self.matrix[i].append(data[i * column_count + y])
+
+    def change_by_index(self, row_index: int, column_index: int, new_value: int):
+        try:
+            self.matrix[row_index - 1][column_index - 1] = new_value
+        except IndexError:
+            print('В матрице нет элемента с такими индексами')
+    def print(self):
+        for i in range(len(self.matrix)):
+            for y in range(len(self.matrix[i])):
+                print(self.matrix[i][y], end=' ')
+            print()
+
+    def clear(self):
+        self.matrix.clear()
+
+    def __mul__(self, other):
+        try:
+            if range(self.columns) != range(other.rows):
+                raise ValueError
+            for first_matrix_row_index in range(self.rows):
+                for second_matrix_column_index in range(other.columns):
+                    tmp = 0
+                    for elem_index in range(self.columns):
+                        tmp += self.matrix[first_matrix_row_index][elem_index] * other.matrix[elem_index][second_matrix_column_index]
+                    print(tmp, end=' ')
+                print()
+            return Matrix()
+        except ValueError:
+            print('Количество строк не соотвествует количеству столбцов')
+'''
+val_1 = Matrix()
+val_1.create(2, 2, [1,2,3,4])
+val_2 = Matrix()
+val_2.create(2, 3, [1,2,3,4,5,6])
+val_1 * val_2
+'''
+val_1 = None
+val_2 = None
+while True:
+    print('Выберите действие: \n'
+          '1 - Создать матрицу\n'
+          '2 - Вывести матрицу\n'
+          '3 - Изменить индекс матрицы\n'
+          '4 - Перемножить матрицы\n'
+          '5 - Удалить матрицу\n'
+          '6 - Выход')
+    try:
+        choice = int(input('Цифра: '))
+    except ValueError:
+        print('Вводите только цифры!')
+        continue
+    if choice > 6:
+        print('Команды в диапазоне от 1 до 6. Внимательнее!')
+        continue
+    if choice == 1:
+        try:
+            x = int(input('Укажите количество строк матрицы: '))
+            y = int(input('Укажите количество столбцов матрицы: '))
+            if x < 1 or y < 1:
+                raise Exception
+        except Exception:
+            print("Вводите только целые числа больше ноля!")
+        print('Ввод данных')
+        listik = []
+        for i in range(1, (x * y + 1)):
+            print('Осталось всего', x * y - i + 1, 'элементов матрицы!\nВведите элемент № ', i,)
+            try:
+                z = int(input(': '))
+            except Exception:
+                print("Вводите только целые числа!")
+            listik.append(z)
+        if val_1 is None:
+            val_1 = Matrix()
+            val_1.create(x, y, listik)
+            print('Сохранено как Матрица #1')
+        else:
+            if val_2 is None:
+                val_2 = Matrix()
+                val_2.create(x, y, listik)
+                print('Сохранено как Матрица #2')
+            else:
+                print('Все матрицы заняты! Сначала удалите какую-нибудь!')
+
+    if choice == 2:
+        try:
+            pr_matrix = int(input('Какую матрицу хотите вывести?\n1 - Первую\n2 - Вторую\n: '))
+        except ValueError:
+            print('Выберите 1 или 2')
+            continue
+        if pr_matrix == 1:
+            if val_1 is None:
+                print('Матрица не задана')
+            else:
+                val_1.print()
+        elif pr_matrix == 2:
+            if val_2 is None:
+                print('Матрица не задана')
+            else:
+                val_2.print()
+        else:
+            print('Нераспознанная команда')
+
+    if choice == 3:
+        try:
+            x = int(input('Укажите номер строки: '))
+            y = int(input('Укажите номер столбца: '))
+            if x < 1 or y < 1:
+                raise Exception
+        except Exception:
+            print("Вводите только целые числа больше ноля!")
+        try:
+            z = int(input('Новое значение: '))
+            pr_matrix = int(input('Значение какой матрицы вы хотите изменить?\n1 - Первую\n2 - Вторую\n: '))
+        except Exception:
+            print("Вводите только целые числа")
+        if pr_matrix == 1:
+            if val_1 is None:
+                print('Матрица не задана')
+            else:
+                val_1.change_by_index(x, y, z)
+        elif pr_matrix == 2:
+            if val_2 is None:
+                print('Матрица не задана')
+            else:
+                val_2.change_by_index(x, y, z)
+        else:
+            print('Нераспознанная команда')
+
+    if choice == 4:
+        if val_1 is None or val_2 is None:
+            print('Одна из матриц не задана')
+        else:
+            pr_matrix = input('Как перемножаем матрицы?\n1 - Матрица1 * Матрица2\n2 - Матрица2 * Матрица1\n: ')
+            if int(pr_matrix) == 1:
+                val_1 * val_2
+            elif int(pr_matrix) == 2:
+                val_2 * val_1
+            else:
+                print('Нераспознанная команда')
+    if choice == 5:
+        if val_1 is None and val_2 is None:
+            print('Матриц нет в памяти')
+        else:
+            pr_matrix = input('Какую матрицу вы хотите удалить?\n1 - Матрица 1\n2 - Матрица 2\n: ')
+            if int(pr_matrix) == 1:
+                val_1.clear()
+                print('Матрица1 удалена')
+                val_1 = None
+            elif int(pr_matrix) == 2:
+                val_2.clear()
+                print('Матрица2 удалена')
+                val_2 = None
+            else:
+                print('Нераспознанная команда')
+    if choice == 6:
+        break
